@@ -75,7 +75,7 @@ public class VertxHttpMethod {
             path,
             asyncResp);
     clientRequest.putHeader(io.servicecomb.core.Const.TARGET_MICROSERVICE, invocation.getMicroserviceName());
-    RestClientRequestImpl restClientRequest = new RestClientRequestImpl(clientRequest);
+    RestClientRequestImpl restClientRequest = new RestClientRequestImpl(clientRequest, httpClientWithContext.context().owner());
     RestCodec.argsToRest(invocation.getArgs(), swaggerRestOperation, restClientRequest);
 
     Buffer requestBodyBuffer = restClientRequest.getBodyBuffer();
@@ -104,7 +104,7 @@ public class VertxHttpMethod {
       try {
         restClientRequest.end();
       } catch (Exception e) {
-        LOGGER.error("send http reqeust failed,", e);
+        LOGGER.error("send http request failed,", e);
         asyncResp.fail(invocation.getInvocationType(), e);
       }
     });
